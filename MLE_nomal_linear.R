@@ -154,6 +154,7 @@ poissonLogLik <- function(lambda,data){
   logLik = (sum(data)*log(lambda)-n*lambda)
   #print(logLik)
   #plot(lambda,logLik)
+  return(logLik)
 }
 
 
@@ -218,7 +219,7 @@ mean(x_poisson2)
 
 # n=50
 x_poisson50 <- rpois(n = 50, lambda = 10)
-
+hist(x_poisson50)
 x_poisson50          # 
 # sum(x_poisson50) = 470
 mle_poisson50 <- maxLik(poissonLogLik,start = c(5),data=x_poisson50)   # after 6 iterations
@@ -246,8 +247,38 @@ mean(x_poisson50)
 # at what point they jumoed or divergeed to get to the lambda value (some sort of gradient descent or ascent)
 
 
+# 100 random numbers
+set.seed(100)
+x_poisson100 <- rpois(n = 100, lambda = 10)
+
+x_poisson100          # 
+hist(x_poisson100)
+mean(x_poisson100)
+# sum(x_poisson50) = 470
+mle_poisson100 <- maxLik(poissonLogLik,start = c(5),data=x_poisson100)   # after 5 iterations
+mle_poisson100 <- maxLik(poissonLogLik,start = c(8),data=x_poisson100)   # after 4 iterations
+mle_poisson100 <- maxLik(poissonLogLik,start = c(9),data=x_poisson100)   # after 3 iterations        # 18 warnings
+mle_poisson100 <- maxLik(poissonLogLik,start = c(11),data=x_poisson100)   # after 4 iterations
+mle_poisson100 <- maxLik(poissonLogLik,start = c(13),data=x_poisson100)   # after 5 iterations       # from 13 to 7 to 9
+summary(mle_poisson100)
+coef(mle_poisson100)
+mean(x_poisson100)
+
+
+# Estimate : 1256.735;      
+# estimate : 9,8000           std.erros: 0.3198     tvalue: 30.64       Pr(> t): <2e-16
+#                                         0.3162                   31
+#                                        0.2996             32.71
+                                                            
+
+x_poisson_random <- c(12,5,12,9,8)
+hist(x_poisson_random)
+poissonLogLik(10, x_poisson_random)
+sum(x_poisson_random)
+mean(x_poisson_random)
+maxLik(poissonLogLik, start = c(9), data = x_poisson_random)
 
 
 
-
+# Now, generating non-uniform numbers , i.e, numbers with gaps in between
 
