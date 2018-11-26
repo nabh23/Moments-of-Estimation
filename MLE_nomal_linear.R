@@ -167,14 +167,113 @@ mle_poisson2 <- maxLik(poissonLogLik,start = c(1),data=x_poisson)  # after 9 ite
 summary(mle_poisson2)
 mean(x_poisson)
 
+
+############################################################################
+################## Plotting log-likelihood #################################
+
+#lambda = 2
+#plot(lambda, sapply(X=lambda, FUN = function(lambda) poissonLogLik(lambda,data = x_poisson)))
+set.seed(100)
+
 data1 <- c(1,2,4,2,32,2,34,2,287)
 b <- maxLik(poissonLogLik,start = c(3),data=data1)
 summary(b)
 
 
-lambda = 2
-plot(lambda, sapply(X=lambda, FUN = function(lambda) poissonLogLik(lambda,data = x_poisson)))
-  
+lambda <- c(2,3,4)
+#plot(lambda, sapply(X=lambda, FUN = function(lambda) poissonLogLik(lambda,data = x_poisson)))
+
+vllh <- Vectorize(poissonLogLik,"lambda")
+vllh(c(2,3,4),x_poisson)
+plot(lambda, vllh(lambda,x_poisson), type="l")
+
+
+# Generating 2 numbers
+x_poisson2 <- rpois(n = 2, lambda = 3 )     # Here the dataset is created with lambda=3
+# But my estimate is 2; Also the log-likelihood is maximum for lambda = 2
+x_poisson2
+summary(maxLik(poissonLogLik,start = c(3),data=x_poisson2))
+lambda2 <- c(2,3,4)
+#vllh2 <- Vectorize(poissonLogLik,"lambda2")
+vllh(c(2,3,4), x_poisson2)
+# plot of log-lokelihood for 2 random numbers with different lambdas
+plot(lambda2, vllh(lambda2,x_poisson2), type="l")
+
+
+
+# Generating 50 numbers
+
+# 1. With lambda = 3
+
+
+x_poisson50_1 <- rpois(n = 50, lambda = 3)
+# using the same range of lambdas as before to estimate
+# i.e c(2,3,4)
+
+vllh(c(2,3,4), x_poisson50_1)
+plot(lambda2, vllh(lambda2,x_poisson50_1), type="l")
+
+# 2. With lambda = 5
+x_poisson50_2 <- rpois(n = 50, lambda = 5)
+x_poisson50_2
+mean(x_poisson50_2)
+summary(maxLik(poissonLogLik,start = c(3),data=x_poisson50_2))
+
+lambda3 <- c(3,4,5,7)
+vllh(c(3,4,5,7), x_poisson50_2)
+plot(lambda3, vllh(lambda3,x_poisson50_2), type="l")
+
+## Why the log-likelihoods are positive ?? Does the value of kambda during generation of
+# numbers have any affect on the log-likelihood?
+
+# 3. With lambda = 2
+x_poisson50_3 <- rpois(n = 50, lambda = 2)
+x_poisson50_3
+mean(x_poisson50_3)
+summary((maxLik(poissonLogLik,start = c(3),data=x_poisson50_3)))
+
+lambda4 <- c(1,3,2,4,5)
+vllh(c(1,3,2,4,5), x_poisson50_3)
+plot(lambda4, vllh(lambda4,x_poisson50_3), type="l")
+
+
+# Generating 100 random poisson distributions
+
+# 1. With lambda = 2
+x_poisson100_1 <- rpois(n = 100, lambda = 2)
+x_poisson100_1
+mean(x_poisson100_1)
+summary((maxLik(poissonLogLik,start = c(4),data=x_poisson100_1)))
+
+lambda5 <- c(1,2,3,4,5)
+vllh(c(1,2,3,4,5), x_poisson100_1)
+plot(lambda5, vllh(lambda5,x_poisson100_1), type="l")
+
+
+# 2. with lambda = 4
+x_poisson100_2 <- rpois(n = 100, lambda = 5)
+x_poisson100_2
+mean(x_poisson100_2)
+summary((maxLik(poissonLogLik,start = c(4),data=x_poisson100_2)))
+#summary((maxLik(poissonLogLik,start = c(11),data=rpois(n = 100, lambda = 9))))
+
+lambda6 <- c(2,3,5,6,7)
+vllh(c(2,3,5,6,7), x_poisson100_2)
+plot(lambda6, vllh(lambda6,x_poisson100_2), type="l")
+
+
+# 3. with lambda = 9
+x_poisson100_3 <- rpois(n = 100, lambda = 9)
+x_poisson100_3
+mean(x_poisson100_3)
+summary((maxLik(poissonLogLik,start = c(6),data=x_poisson100_3)))
+#summary((maxLik(poissonLogLik,start = c(11),data=rpois(n = 100, lambda = 9))))
+
+lambda7 <- c(5,7,8,9,11,12)
+vllh(c(5,7,8,9,11,12), x_poisson100_3)
+plot(lambda7, vllh(lambda7,x_poisson100_3), type="l")
+
+
 
 #########################################################################
 #### Poisson distribution is specified by one parameter : lambda
