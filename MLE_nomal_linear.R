@@ -354,12 +354,24 @@ mtext(expression(hat(y)), side=1, at=mean(mle_ran_3$estimate), padj=1, cex=1.1)
 
 
 #####################
-x_random200 <- replicate(min(diff(mysample(100, 1, 100000, 2.5))), n = 200)
+x_random200 <- replicate((diff(mysample(100, 1, 10000, 2.5))), n = 1)
 x_random200
-min(x_random100)
-mean(x_random100)
-mle_ran_3 <- (maxLik(poissonLogLik,start = c(36),data=x_random100))
-summary(mle_ran_3)
+min(x_random200)
+mean(x_random200)
+mle_ran_4 <- (maxLik(poissonLogLik,start = c(98),data=x_random200))
+summary(mle_ran_4)
+
+
+
+lambda_ran_4 <- seq(97,103,.6)
+vllh(seq(97,102,.6), x_random200)
+plot(lambda_ran_4, vllh(lambda_ran_4,x_random200), type="l",xlab="lambda", ylab="log-likelihood")
+#abline(v=mean(x_random2), lty=2)
+abline(v=mle_ran_4$estimate, lty=2)
+abline(h=mle_ran_4$maximum, lty=1)
+mtext(expression(hat(y)), side=1, at=mean(mle_ran_4$estimate), padj=1, cex=1.1)
+
+
 
 
 #########################################################################
