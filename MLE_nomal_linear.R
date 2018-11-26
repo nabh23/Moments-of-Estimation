@@ -254,13 +254,16 @@ plot(lambda5, vllh(lambda5,x_poisson100_1), type="l")
 x_poisson100_2 <- rpois(n = 100, lambda = 5)
 x_poisson100_2
 mean(x_poisson100_2)
-summary((maxLik(poissonLogLik,start = c(4),data=x_poisson100_2)))
+mle_poisson100_2 <- (maxLik(poissonLogLik,start = c(4),data=x_poisson100_2))
+summary(mle_poisson100_2)
 #summary((maxLik(poissonLogLik,start = c(11),data=rpois(n = 100, lambda = 9))))
 
 lambda6 <- c(2,3,5,6,7)
 vllh(c(2,3,5,6,7), x_poisson100_2)
 plot(lambda6, vllh(lambda6,x_poisson100_2), type="l")
-
+#abline(v=mean(x_poisson100_2), lty=2)
+abline(v=mle_poisson100_2$estimate, lty=2)
+mtext(expression(hat(y)), side=1, at=(mle_poisson100_2$estimate), padj=1, cex=1.1)
 
 # 3. with lambda = 9
 x_poisson100_3 <- rpois(n = 100, lambda = 9)
@@ -272,7 +275,91 @@ summary((maxLik(poissonLogLik,start = c(6),data=x_poisson100_3)))
 lambda7 <- c(5,7,8,9,11,12)
 vllh(c(5,7,8,9,11,12), x_poisson100_3)
 plot(lambda7, vllh(lambda7,x_poisson100_3), type="l")
+#abline(v=mean(x_poisson100_3), lty=2)
+abline(v=mle_poisson100_3$estimate, lty=2)
+mtext(expression(hat(y)), side=1, at=mean(x_poisson100_3$estimate), padj=1, cex=1.1)
 
+
+########################################################################
+## Now repeating same steps for random non-uniformly spaced numbers
+
+# Function to generate random non-uniformly spaced numbers
+
+mysample <- function(n, lower, upper, space) {
+  b <- ceiling((upper - lower + 1) / (space - 1))
+  bs <- sample(seq(2, b - 1, by = 2), n - 1)
+  gr <- split(setdiff(1:b,bs), cumsum(c(0, diff(setdiff(1:b, bs))) != 1))
+  out <- sapply(gr, function(x) (x[1] - 1) * (space - 1) + ceiling(runif(1) * length(x) * (space - 1)))
+  out[n] <- min(out[n], upper)
+  out
+}
+
+
+
+# 1. generating 2 numbers
+#set.seed(123)
+x_random2 <- replicate(min(diff(mysample(100, 1, 100000, 5))), n = 2)
+x_random2
+min(x_random2)
+mean(x_random2)
+mle_ran_2 <- (maxLik(poissonLogLik,start = c(52),data=x_random2))
+summary(mle_ran_2)
+#summary((maxLik(poissonLogLik,start = c(11),data=rpois(n = 100, lambda = 9))))
+
+lambda_ran_1 <- seq(50,54,.5)
+vllh(seq(50,54, .5), x_random2)
+plot(lambda_ran_1, vllh(lambda_ran_1,x_random2), type="l", xlab="lambda", ylab="log-likelihood")
+#abline(v=mean(x_random2), lty=2)
+abline(v=mle_ran_2$estimate, lty=2)
+mtext(expression(hat(y)), side=1, at=mean(mle_ran_2$estimate), padj=1, cex=1.1)
+
+
+# 2. generating 50 numbers
+
+x_random50 <- replicate(min(diff(mysample(100, 1, 100000, 5))), n = 50)
+x_random50
+min(x_random50)
+mean(x_random50)
+mle_ran_2 <- (maxLik(poissonLogLik,start = c(34),data=x_random50))
+summary(mle_ran_2)
+#summary((maxLik(poissonLogLik,start = c(11),data=rpois(n = 100, lambda = 9))))
+
+lambda_ran_2 <- seq(29.5,33,.5)
+vllh(seq(29.5,33,.5), x_random50)
+plot(lambda_ran_2, vllh(lambda_ran_2,x_random50), type="l",xlab="lambda", ylab="log-likelihood")
+#abline(v=mean(x_random2), lty=2)
+abline(v=mle_ran_2$estimate, lty=2)
+abline(h=mle_ran_2$maximum, lty=1)
+mtext(expression(hat(y)), side=1, at=mean(mle_ran_2$estimate), padj=1, cex=1.1)
+
+
+# 3. generating 100 numbers
+
+x_random100 <- replicate(min(diff(mysample(100, 1, 100000, 2))), n = 100)
+x_random100
+min(x_random100)
+mean(x_random100)
+mle_ran_3 <- (maxLik(poissonLogLik,start = c(36),data=x_random100))
+summary(mle_ran_3)
+#summary((maxLik(poissonLogLik,start = c(11),data=rpois(n = 100, lambda = 9))))
+
+lambda_ran_3 <- seq(31,36,.6)
+vllh(seq(31,36,.6), x_random100)
+plot(lambda_ran_3, vllh(lambda_ran_3,x_random100), type="l",xlab="lambda", ylab="log-likelihood")
+#abline(v=mean(x_random2), lty=2)
+abline(v=mle_ran_3$estimate, lty=2)
+abline(h=mle_ran_3$maximum, lty=1)
+mtext(expression(hat(y)), side=1, at=mean(mle_ran_3$estimate), padj=1, cex=1.1)
+
+
+
+#####################
+x_random200 <- replicate(min(diff(mysample(100, 1, 100000, 2.5))), n = 200)
+x_random200
+min(x_random100)
+mean(x_random100)
+mle_ran_3 <- (maxLik(poissonLogLik,start = c(36),data=x_random100))
+summary(mle_ran_3)
 
 
 #########################################################################
