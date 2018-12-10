@@ -181,6 +181,7 @@ summary(b)
 
 
 lambda <- c(2,3,4)
+lambda <- seq(0.5,5,length.out = 100)
 #plot(lambda, sapply(X=lambda, FUN = function(lambda) poissonLogLik(lambda,data = x_poisson)))
 
 vllh <- Vectorize(poissonLogLik,"lambda")
@@ -197,7 +198,7 @@ lambda2 <- c(2,3,4)
 #vllh2 <- Vectorize(poissonLogLik,"lambda2")
 vllh(c(2,3,4), x_poisson2)
 # plot of log-lokelihood for 2 random numbers with different lambdas
-plot(lambda2, vllh(lambda2,x_poisson2), type="l")
+plot(lambda, vllh(lambda,x_poisson2), type="l")
 
 
 
@@ -209,9 +210,9 @@ plot(lambda2, vllh(lambda2,x_poisson2), type="l")
 x_poisson50_1 <- rpois(n = 50, lambda = 3)
 # using the same range of lambdas as before to estimate
 # i.e c(2,3,4)
-
+mean(x_poisson50_1)
 vllh(c(2,3,4), x_poisson50_1)
-plot(lambda2, vllh(lambda2,x_poisson50_1), type="l")
+plot(lambda, vllh(lambda,x_poisson50_1), type="l")
 
 # 2. With lambda = 5
 x_poisson50_2 <- rpois(n = 50, lambda = 5)
@@ -247,7 +248,7 @@ summary((maxLik(poissonLogLik,start = c(4),data=x_poisson100_1)))
 
 lambda5 <- c(1,2,3,4,5)
 vllh(c(1,2,3,4,5), x_poisson100_1)
-plot(lambda5, vllh(lambda5,x_poisson100_1), type="l")
+plot(lambda, vllh(lambda,x_poisson100_1), type="l")
 
 
 # 2. with lambda = 4
@@ -324,7 +325,7 @@ mle_ran_2 <- (maxLik(poissonLogLik,start = c(34),data=x_random50))
 summary(mle_ran_2)
 #summary((maxLik(poissonLogLik,start = c(11),data=rpois(n = 100, lambda = 9))))
 
-lambda_ran_2 <- seq(29.5,33,.5)
+lambda_ran_2 <- seq(29.5,36,.5)
 vllh(seq(29.5,33,.5), x_random50)
 plot(lambda_ran_2, vllh(lambda_ran_2,x_random50), type="l",xlab="lambda", ylab="log-likelihood")
 #abline(v=mean(x_random2), lty=2)
@@ -343,7 +344,7 @@ mle_ran_3 <- (maxLik(poissonLogLik,start = c(36),data=x_random100))
 summary(mle_ran_3)
 #summary((maxLik(poissonLogLik,start = c(11),data=rpois(n = 100, lambda = 9))))
 
-lambda_ran_3 <- seq(31,36,.6)
+lambda_ran_3 <- seq(29,36,.6)
 vllh(seq(31,36,.6), x_random100)
 plot(lambda_ran_3, vllh(lambda_ran_3,x_random100), type="l",xlab="lambda", ylab="log-likelihood")
 #abline(v=mean(x_random2), lty=2)
@@ -370,6 +371,15 @@ plot(lambda_ran_4, vllh(lambda_ran_4,x_random200), type="l",xlab="lambda", ylab=
 abline(v=mle_ran_4$estimate, lty=2)
 abline(h=mle_ran_4$maximum, lty=1)
 mtext(expression(hat(y)), side=1, at=mean(mle_ran_4$estimate), padj=1, cex=1.1)
+
+########### The maxLik or MLE is able to estimate data with discrepency in numbers
+# 
+
+
+## We sampled 3000 with replacement from a set of 586
+
+
+
 
 
 
